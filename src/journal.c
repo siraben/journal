@@ -39,8 +39,6 @@ int get_magic(block *super) { return super->super.magic; }
 int check_valid(block *journal) { return get_magic(journal) == MAGIC ? 1 : 0; }
 
 void add_entry(block *dest, const char *title, const char *contents) {
-  entry *res;
-  res = calloc(1, sizeof(entry));
   int i = 1;
   while (dest[i].used) {
     i++;
@@ -104,6 +102,7 @@ block *create_new_journal(const char *name) {
   super = calloc(1, sizeof(superblock));
   strncpy(super->name, name, 80);
   res[0].super = *super;
+  // free(super);
   return res;
 }
 
