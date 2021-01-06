@@ -11,12 +11,13 @@
 
 #define MAGIC 0xbeefbead
 #define MAX_SIZE 20
+#define BUFSIZE 4096
 
 static int saved = 1;
 
 typedef struct entry {
   char name[80];
-  char contents[4096];
+  char contents[BUFSIZE];
 } entry;
 
 typedef struct superblock {
@@ -312,7 +313,7 @@ void operate(block **journal, const char *input) {
     int x = getchar(), j = 0;
     do {
       contents[j++] = x;
-    } while ((x = getchar()) != '#');
+    } while ((x = getchar()) != '#' && j < BUFSIZE);
     add_entry(*journal, args, contents);
     saved = 0;
   } else if (strcmp(input, "delete") == 0) {
